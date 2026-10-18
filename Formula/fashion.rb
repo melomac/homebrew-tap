@@ -1,8 +1,8 @@
 class Fashion < Formula
   desc "Cryptographic and fuzzy hash digests for macOS binary triage"
   homepage "https://codeberg.org/melomac/fashion"
-  url "https://codeberg.org/melomac/fashion/releases/download/v1.5.2/fashion.zip"
-  sha256 "d17a1c5db297568051b31c5ff226ec8252aadefa45e0630dd230d7c6d2d197dd"
+  url "https://codeberg.org/melomac/fashion/releases/download/v1.5.3/fashion.zip"
+  sha256 "ceec5caf0d4e88e37463320cd6c0ff4ef894fee521f9a7c09e8d91ba637a2aa0"
   license "GPL-3.0-or-later"
 
   livecheck do
