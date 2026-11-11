@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  formulae:
+    name: ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - macos-26
+          - xcode-27
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_ENV_HINTS: 1
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+    steps:
+      - name: Set up Homebrew
+        id: homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+
+      - name: List formulae
+        env:
+          TAP: ${{ steps.homebrew.outputs.tap-name }}
+        run: |
+          brew config
+          formulae=$(brew tap-info --json "$TAP" | jq -r '.[].formula_names | join(" ")')
+          if [[ -z "$formulae" ]]; then
+            echo "::error::No formulae found in $TAP"
+            exit 1
+          fi
+          echo "FORMULAE=$formulae" >> "$GITHUB_ENV"
+
+      - name: brew install
+        run: brew install --formula $FORMULAE
+
+      - name: brew test
+        run: brew test $FORMULAE
