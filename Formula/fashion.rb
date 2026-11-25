@@ -26,10 +26,12 @@ class Fashion < Formula
       bin.install "fashion"
     end
     prefix.install "LICENSE", "NOTICE"
+    generate_completions_from_executable(bin/"fashion", "--generate-completion-script")
   end
 
   test do
     (testpath/"hello").write "hello\n"
-    assert_match "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03", shell_output("#{bin}/fashion #{testpath}/hello")
+    digest = "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+    assert_match digest, shell_output("#{bin}/fashion #{testpath}/hello")
   end
 end
